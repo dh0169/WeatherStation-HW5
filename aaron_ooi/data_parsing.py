@@ -2,27 +2,35 @@
 import csv
 import json
 import xml
-import pandas as pd
+import os
 
-filename = input("Enter the file name: ")
-format = input("Enter a format: ")
+file_path = "CMPE131-TermProject\\aaron_ooi\\data.txt"
+format = input("Enter a format (c,j,x): ")
+with open(file_path, "r") as f:
+    text = f.read()
+
 
 def parse(filename, format):
     if(format == 'c'):  
-        # with open(filename, 'r') as r:
-        #     reader = csv.reader(r,delimiter='\t')
-        #     # for row in reader:
-        #     #     print(row)
-        # with open('test.csv', 'w', newline='') as w:
-        #     writer = csv.writer(w)
-        #     for rows in reader:
-        #         writer.writerows(rows)
         csv_read = pd.read_csv(filename, delimiter='\t')
-        csv_read.to_csv('test.csv', index=None)
+        csv_read.to_csv('data.csv', index=None)
     elif format == 'j':
-        with open('test.json', 'w') as outfile,open(filename,'r') as f:
-            data = json.load(f)
-            json.dump(data,outfile,sort_keys=True)
+        each_line = text.split("\n")
+        header = each_line[0].split("\t")
+        data = []
+        for line in each_line[1:]:
+            col_val = line.split("\t")
+            collection_data = {}
+            for i, col in enumerate(col_val):
+                #Store the entire row's data to collection_data
+                collection_data[header[i]] = col
+            #Finally, add the dict to list
+            data.append(collection_data)
+        json_format = json.dumps(data)
+        with open(file_path+"\data.json", "w") as out_file:
+            out_file.write(json_format)
+        
+    else:
+        print("")
 
-
-parse(filename, format)
+parse("data.txt", format)

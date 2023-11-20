@@ -1,13 +1,11 @@
 {
   "dependencies": {
     "http-server": "^14.1.1",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "sync-request": "^6.1.0"
   },
   "scripts": {
-    "test": "mocha"
-  },
-
-  "scripts": {
-    "start": "http-server -c-1 -p 8081"
+    "start": "http-server -c-1 -p 8081",
+    "test": "./node_modules/mocha/bin/mocha.js"
   }
 }

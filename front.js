@@ -1,25 +1,4 @@
-// Team: N.A.D.A
-// Weather Station Web Application
-
-let weather = {
-  apiKey: "ce941f39aab90056289106d7803ab71a",
-  fetchWeather: (city) => {
-    fetch(
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-        city +
-        "&units=imperial&appid=" +
-        weather.apiKey
-    )
-      .then((response) => {
-        if (!response.ok) {
-          alert("No weather found.");
-          throw new Error("No weather found.");
-        }
-        return response.json();
-      })
-      .then((data) => weather.displayWeather(data));
-  },
-  displayWeather: (data) => {
+let displayWeather = ((data) => {
     console.log(data);
     const { name: city } = data;
     const { icon, description } = data.weather[0];
@@ -35,22 +14,24 @@ let weather = {
     document.querySelector(".weather").classList.remove("loading");
     document.body.style.backgroundImage =
       "url('https://source.unsplash.com/1600x900/?" + city + "')";
-  },
-  search: function () {
-    this.fetchWeather(document.querySelector(".search-bar").value);
-  },
-};
+ });
+
+let search = (() => {
+    weather.fetchWeather(document.querySelector(".search-bar").value, displayWeather);
+});
+
 
 document.querySelector(".search button").addEventListener("click", function () {
-  weather.search();
+  search();
 });
 
 document
   .querySelector(".search-bar")
   .addEventListener("keyup", function (event) {
     if (event.key === "Enter") {
-      weather.search();
+      search();
     }
   });
 
-weather.fetchWeather("San Jose");
+
+weather.fetchWeather("San Jose", displayWeather);
